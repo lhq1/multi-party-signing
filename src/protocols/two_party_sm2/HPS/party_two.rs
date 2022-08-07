@@ -329,9 +329,9 @@ impl Party2Public{
         );
         if proof_verify.is_ok(){
             Ok(Party2Public{
-              group: &hsmcl_setup.group,
-              ek:&hsmcl_setup.ek,
-              encrypted_secret_share: &hsmcl_public.encrypted_share,
+              group: hsmcl_setup.group.clone(),
+              ek:hsmcl_setup.ek.clone(),
+              encrypted_secret_share: hsmcl_public.encrypted_share.clone(),
             })
         }
         else {
@@ -360,7 +360,7 @@ impl PartialSig {
         let c1=eval_scal(&party_two_public.encrypted_secret_share, &k2);
         
         let d_fe = Scalar::<Secp256k1>::from(&d);
-        let c_tmp = encrypt(&party_two_public.encrypted_secret_share, &d_fe);
+        let c_tmp = encrypt(&party_two_public.group, &party_two_public.ek, &d_fe);
         let c2 = eval_sum(&c_tmp.0, &c1);
 
         let s2 = &local_share.s2.to_bigint();

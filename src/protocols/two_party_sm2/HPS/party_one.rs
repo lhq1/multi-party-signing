@@ -267,7 +267,7 @@ impl HSMCLPublic{
         HSMCLPublic { 
             proof, 
             encrypted_share: ciphertext,
-            public_share: keygen.public_share,
+            public_share: keygen.public_share.clone(),
         }
     }
 }
@@ -406,7 +406,7 @@ pub fn verify(
     
     let dz_fe = Scalar::<Secp256k1>::from(&dz);
     let u1 = Point::generator() * z_fe;
-    let u2 = Point::generator() * dz_fe;
+    let u2 = pubkey * dz_fe;
     let R=u1+u2;
     let rx=&R.x_coord().unwrap();
     let rx_plus_e_byte = &BigInt::to_bytes(&(rx+message));
